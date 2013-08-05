@@ -1,6 +1,13 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-require 'mechanize'
+require 'bundler/setup'
+
+case ENV['RUBY_ENV']
+  when 'production' then
+    Bundler.require(:default)
+  else
+    Bundler.require(:default, :development)
+end
 
 class Poker
 
