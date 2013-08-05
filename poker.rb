@@ -10,46 +10,48 @@ case ENV['RUBY_ENV']
 end
 
 class Poker
+  attr_reader :agent
 
-  def initialize
+  def initialize(email, pass)
     @agent = Mechanize.new
-    @agent.get('http://m.facebook.com/')
-    puts @agent.page.title
+
+    self.agent.get('http://m.facebook.com')
+    puts agent.page.title
+    self.login(email, pass)
   end
-  
+
   def login(email, pass)
-    form = @agent.page.form_with(method: 'POST')
-    form.email = email
-    form.pass = pass
-    @agent.submit(form)
-    @agent.get('http://m.facebook.com/pokes')
-    puts @agent.page.title
+    form = self.agent.page.form_with(method: 'POST')
+    form.email, form.pass = email, pass
+
+    self.agent.submit(form)
+    self.agent.get('http://m.facebook.com/pokes')
+    puts self.agent.page.title
   end
-    
+
   def logout
-    @agent.page.link_with(text: /logout/).click
+    self.agent.page.link_with(text: /logout/).click
   end
-    
+
   def poke_back_everybody
-    @agent.get('http://m.facebook.com/pokes') #refresh the page
-    
+    self.agent.get('http://m.facebook.com/pokes') #refresh the page
     #get the names of the pokers:
-    @agent.page.search("[class='pokerName']").each do |link|
+    self.agent.page.search("[class='pokerName']").each do |link|
       puts "#{link.inner_text} poked back"
     end
-    
+
     #poke back:
-    links = @agent.page.links_with(text: 'Poke back')
+    links = self.agent.page.links_with(text: 'Poke back')
     links.each{ |l| l.click }
   end
 
 end
 
-EMAIL = "EMAIL"
-PASS = "PASSWORD"
-poker = Poker.new
-poker.login(EMAIL,PASS)
-while true do
-  poker.poke_back_everybody
-  sleep(5)
+raise 'please provide ENV_EMAIL & ENV_PASS' unless ENV['ENV_EMAIL'] && ENV['ENV_PASS']
+
+Poker.new(ENV['ENV_EMAIL'], ENV['ENV_PASS']).tap do |poker|
+  while true do
+    poker.poke_back_everybody
+    sleep(5)
+  end
 end
