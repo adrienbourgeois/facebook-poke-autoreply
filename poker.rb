@@ -17,6 +17,7 @@ class Poker
   def initialize(email, pass)
     puts "a"
     @agent = Mechanize.new
+    @agent.user_agent_alias = 'iPhone'
     puts "b"
     self.agent.get('http://m.facebook.com')
     puts agent.page.title
