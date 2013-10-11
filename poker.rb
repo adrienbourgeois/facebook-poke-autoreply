@@ -18,7 +18,7 @@ class Poker
     @agent = Mechanize.new
     @agent.user_agent_alias = 'iPhone'
     self.agent.get('http://m.facebook.com')
-    puts agent.page.title
+    puts 'Facebook is unreachable' unless agent.page.title == 'Welcome to Facebook'
     self.login(email, pass)
   end
 
@@ -28,7 +28,7 @@ class Poker
 
     self.agent.submit(form)
     self.agent.get('http://m.facebook.com/pokes')
-    puts self.agent.page.title
+    puts 'Impossible to login. Try to login on facebook website to check everything is ok' unless self.agent.page.title == 'Pokes'
   end
 
   def logout
@@ -37,8 +37,11 @@ class Poker
 
   def poke_back_everybody
     self.agent.get('http://m.facebook.com/pokes')
-    self.agent.page.search("[class='pokerName']").each do |link|
-      puts "#{link.inner_text} poked back"
+    self.agent.page.search("[class='_5hn8']").each do |link|
+      div_text = link.inner_text
+      if div_text[-10..div_text.size] == 'poked you.'
+        puts "#{div_text[0..-12]} poked back"
+      end
     end
 
     links = self.agent.page.links_with(text: 'Poke back')
@@ -49,7 +52,6 @@ end
 
 print "Put your mail: "
 mail = gets.chomp
-#pass = gets.chomp
 pass = ask("Password: ") { |q| q.echo = "" }
 
 print "Enter the minimum number of seconds between two pokes (has to be greater than 10): "
@@ -60,7 +62,7 @@ delay = 10 if delay == nil || delay < 10
 Poker.new(mail, pass).tap do |poker|
   while true do
     poker.poke_back_everybody
-    sleep(5)
+    sleep(delay)
   end
 end
 

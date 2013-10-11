@@ -1,0 +1,12 @@
+==The Poke Machine
+
+This little app poke back automaticaly any person that poked you.
+
+It uses the gem 'mechanize'. It simply access m.facebook.com/pokes and parse the page looking for 'poke back button'. If it finds one, then it press it.
+
+The application may need some little update if facebook change the name or the class of its buttons.
+
+Note that the app may be unable to connect to your account if you use advanced security protection with your facebook account.
+
+The application check for new pokes every 10 seconds, if you do it more often, facebook might think you are doing wrong things and might block your account.
+
