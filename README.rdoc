@@ -1,5 +1,7 @@
 ==The Poke Machine
 
+{<img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/adrienbourgeois/facebook-poke-autoreply">}[https://gitter.im/adrienbourgeois/facebook-poke-autoreply?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge]
+
 This little app poke back automaticaly any person that poked you.
 
 It uses the gem 'mechanize'. It simply access m.facebook.com/pokes and parse the page looking for 'poke back button'. If it finds one, then it press it.
